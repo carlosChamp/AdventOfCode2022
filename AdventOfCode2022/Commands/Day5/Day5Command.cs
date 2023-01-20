@@ -8,8 +8,8 @@ namespace AdventOfCode2022.Commands
 {
     internal class Day5Command : IDayCommand
     {
-        public int Day => 5;
-        public string InputFileName => CommandUtils.GetInputFilePath(this.Day);
+        public static int Day => 5;
+        public static string InputFileName => CommandUtils.GetInputFilePath(Day);
         public bool IsPartOneComplete => true;
 
         Pilhas<string> MoveCrater9000 = new Pilhas<string>();
