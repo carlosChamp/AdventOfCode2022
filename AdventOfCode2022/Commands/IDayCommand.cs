@@ -8,9 +8,9 @@ namespace AdventOfCode2022.Commands
 {
     internal interface IDayCommand
     {
-        public int Day { get; }
+        public static int Day { get; }
 
-        public string InputFileName { get; }
+        public static string InputFileName { get; }
         public bool IsPartOneComplete { get; }
 
         internal string PrintHeader();

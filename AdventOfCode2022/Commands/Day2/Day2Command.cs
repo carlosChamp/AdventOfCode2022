@@ -10,9 +10,9 @@ namespace AdventOfCode2022.Commands
 {
     internal partial class Day2Command : IDayCommand
     {
-        public int Day => 2;
+        public static int Day => 2;
 
-        public string InputFileName => CommandUtils.GetInputFilePath(this.Day);
+        public static string InputFileName => CommandUtils.GetInputFilePath(Day);
 
         public bool IsPartOneComplete => true;
 

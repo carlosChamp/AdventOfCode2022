@@ -4,8 +4,8 @@ namespace AdventOfCode2022.Commands
 {
     internal class Day1Command : IDayCommand
     {
-        public int Day { get => 1; }
-        public string InputFileName { get => CommandUtils.GetInputFilePath(Day); }
+        public static int Day { get => 1; }
+        public static string InputFileName { get => CommandUtils.GetInputFilePath(Day); }
         public bool IsPartOneComplete { get => true; }
 
         IList<int> elfos = new List<int>();
