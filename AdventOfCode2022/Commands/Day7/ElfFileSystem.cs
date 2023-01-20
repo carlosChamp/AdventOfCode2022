@@ -1,5 +1,4 @@
 ﻿using AdventOfCode2022.Commands.Day7;
-using System.Security.Cryptography.X509Certificates;
 
 namespace AdventOfCode2022.Commands
 {
