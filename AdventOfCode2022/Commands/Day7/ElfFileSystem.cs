@@ -17,6 +17,7 @@ namespace AdventOfCode2022.Commands
         {
             DiretorioAtual = new Stack<Diretorio>();
             DiretorioAtual.Push(new Diretorio("/"));
+            InputFileSystem = new string[0];
         }
         internal void InterpretInput(string[] inputFileSystem)
         {

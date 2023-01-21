@@ -1,20 +1,26 @@
-﻿using System;
+﻿using AdventOfCode2022.Commands.Day8;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022.Commands.Day8
+namespace AdventOfCode2022.Commands
 {
     internal class Day8Command : IDayCommand
     {
+
+        public static int Day => 8;
+
+        public static string InputFileName => CommandUtils.GetInputFilePath(Day);
         bool IDayCommand.IsPartOneComplete => false;
 
         TreeGrid grid = new TreeGrid();
 
         void IDayCommand.Execute()
         {
-            //TreeGrid.set
+            string[] input = CommandUtils.GetInput(InputFileName);
+            grid.SetGrid(input);
         }
 
         string IDayCommand.PrintHeader()
@@ -24,7 +30,7 @@ namespace AdventOfCode2022.Commands.Day8
 
         string IDayCommand.PrintPart1()
         {
-            throw new NotImplementedException();
+            return grid.PrintVisible() + "\nVisiveis: " + grid.CountVisible();
         }
 
         string IDayCommand.PrintPart2()

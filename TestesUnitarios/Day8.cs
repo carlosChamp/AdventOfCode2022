@@ -4,7 +4,7 @@ namespace TestesUnitarios
 {
     public class TestsDay8
     {
-        DayCommandFactory _dayCommandFactory;   
+        DayCommandFactory _dayCommandFactory;
         [SetUp]
         public void Setup()
         {
@@ -38,8 +38,9 @@ namespace TestesUnitarios
         [Test]
         public void Test1()
         {
-            Assert.AreEqual(16,
-                tree.CountVisible());
+            int quantidadeVisivel = tree.CountVisible();
+            
+            Assert.That(quantidadeVisivel, Is.EqualTo(21));
 
         }
     }
