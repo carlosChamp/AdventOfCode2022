@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml;
 
 [assembly: InternalsVisibleTo("TestesUnitarios")]
 namespace AdventOfCode2022.Commands.Day8
@@ -11,10 +12,6 @@ namespace AdventOfCode2022.Commands.Day8
         bool[,] VisibleTreeMap;
         int linhas, colunas;
         public bool ResolvedGrid { get; set; }
-
-        public TreeGrid()
-        {
-        }
 
         internal int CountVisible()
         {
@@ -28,6 +25,21 @@ namespace AdventOfCode2022.Commands.Day8
             }
 
             return count;
+        }
+
+        internal int MaxScenicScore()
+        {
+            if (!ResolvedGrid)
+                ResolveTreeGrid();
+
+            int max = 0;
+            foreach (var item in Trees)
+            {
+                if (item.ScenicScore > max)
+                    max = item.ScenicScore;
+            }
+
+            return max;
         }
 
         internal void SetGrid(string[] input)
@@ -62,6 +74,7 @@ namespace AdventOfCode2022.Commands.Day8
                     VisibleTreeMap[linha, coluna] = Trees[linha, coluna].Visible;
                 }
             }
+            CalculateScenicScore();
             ResolvedGrid = true;
         }
 
@@ -167,5 +180,85 @@ namespace AdventOfCode2022.Commands.Day8
             }
             return print.ToString();
         }
+
+        internal void CalculateScenicScore()
+        {
+            for (int linha = 0; linha < linhas; linha++)
+            {
+                for (int coluna = 0; coluna < colunas; coluna++)
+                {
+                    CalculateScoreForTree(Trees[linha, coluna], linha, coluna);
+                }
+            }
+
+        }
+
+        private void CalculateScoreForTree(Tree tree, int linha, int coluna)
+        {
+            int linhaInicial = linha;
+            int colunaInicial = coluna;
+            int scenicScore = 1;
+            foreach (TreeDirection direcao in Enum.GetValues<TreeDirection>())
+            {
+                linha = linhaInicial;
+                coluna = colunaInicial;
+                Tree? compareTree = NextTreeByDirection(direcao, ref linha, ref coluna);
+                int distanciaLinear = 0;
+                while (compareTree != null)
+                {
+                    int comparedTreeIndex = compareTree.CompareTo(tree);
+                    if (comparedTreeIndex < 0)
+                    {
+                        distanciaLinear++;
+                        compareTree = NextTreeByDirection(direcao, ref linha, ref coluna);
+                    }
+                    else
+                    {
+                        if (compareTree != null)
+                            distanciaLinear++;
+                        break;
+                    }
+                }
+
+                scenicScore *= distanciaLinear;
+                if (scenicScore == 0)
+                    break;
+            }
+            tree.ScenicScore = scenicScore;
+        }
+
+        private Tree? NextTreeByDirection(TreeDirection treeDirection, ref int linha, ref int coluna)
+        {
+            int direcaoX = 0, direcaoY = 0;
+            switch (treeDirection)
+            {
+                case TreeDirection.top:
+                    direcaoX = -1;
+                    break;
+                case TreeDirection.left:
+                    direcaoY = -1;
+                    break;
+                case TreeDirection.right:
+                    direcaoY = 1;
+                    break;
+                case TreeDirection.down:
+                    direcaoX = 1;
+                    break;
+                default:
+                    break;
+            }
+
+            if (linha + direcaoX < 0 || linha + direcaoX == linhas)
+                return null;
+
+            if (coluna + direcaoY < 0 || coluna + direcaoY == linhas)
+                return null;
+
+            linha += direcaoX;
+            coluna += direcaoY;
+            return Trees[linha, coluna];
+
+        }
+
     }
 }

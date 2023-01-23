@@ -36,12 +36,19 @@ namespace TestesUnitarios
         }
 
         [Test]
-        public void Test1()
+        public void Part1()
         {
             int quantidadeVisivel = tree.CountVisible();
-            
+
             Assert.That(quantidadeVisivel, Is.EqualTo(21));
 
+        }
+        [Test]
+        public void Part2()
+        {
+            int maxScenicScore = tree.MaxScenicScore();
+
+            Assert.That(maxScenicScore, Is.EqualTo(8));
         }
     }
 }

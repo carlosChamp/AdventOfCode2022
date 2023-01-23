@@ -13,7 +13,7 @@ namespace AdventOfCode2022.Commands
         public static int Day => 8;
 
         public static string InputFileName => CommandUtils.GetInputFilePath(Day);
-        bool IDayCommand.IsPartOneComplete => false;
+        bool IDayCommand.IsPartOneComplete => true;
 
         TreeGrid grid = new TreeGrid();
 
@@ -30,12 +30,12 @@ namespace AdventOfCode2022.Commands
 
         string IDayCommand.PrintPart1()
         {
-            return grid.PrintVisible() + "\nVisiveis: " + grid.CountVisible();
+            return "\n" + grid.PrintVisible() + "\nVisiveis: " + grid.CountVisible();
         }
 
         string IDayCommand.PrintPart2()
         {
-            throw new NotImplementedException();
+            return grid.MaxScenicScore().ToString();
         }
     }
 }
