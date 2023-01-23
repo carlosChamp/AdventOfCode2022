@@ -202,7 +202,7 @@ namespace AdventOfCode2022.Commands.Day8
             {
                 linha = linhaInicial;
                 coluna = colunaInicial;
-                Tree? compareTree = NextTreeByDirection(direcao, ref linha, ref coluna);
+                Tree? compareTree = Walk(direcao, ref linha, ref coluna);
                 int distanciaLinear = 0;
                 while (compareTree != null)
                 {
@@ -210,7 +210,7 @@ namespace AdventOfCode2022.Commands.Day8
                     if (comparedTreeIndex < 0)
                     {
                         distanciaLinear++;
-                        compareTree = NextTreeByDirection(direcao, ref linha, ref coluna);
+                        compareTree = Walk(direcao, ref linha, ref coluna);
                     }
                     else
                     {
@@ -227,38 +227,44 @@ namespace AdventOfCode2022.Commands.Day8
             tree.ScenicScore = scenicScore;
         }
 
-        private Tree? NextTreeByDirection(TreeDirection treeDirection, ref int linha, ref int coluna)
+        private Tree? Walk(TreeDirection treeDirection, ref int linha, ref int coluna)
         {
-            int direcaoX = 0, direcaoY = 0;
-            switch (treeDirection)
-            {
-                case TreeDirection.top:
-                    direcaoX = -1;
-                    break;
-                case TreeDirection.left:
-                    direcaoY = -1;
-                    break;
-                case TreeDirection.right:
-                    direcaoY = 1;
-                    break;
-                case TreeDirection.down:
-                    direcaoX = 1;
-                    break;
-                default:
-                    break;
-            }
-
-            if (linha + direcaoX < 0 || linha + direcaoX == linhas)
+            (int x, int y) directions = DirectionToPoints(treeDirection);
+                        
+            if (linha + directions.x < 0 || linha + directions.x == linhas)
                 return null;
 
-            if (coluna + direcaoY < 0 || coluna + direcaoY == linhas)
+            if (coluna + directions.y < 0 || coluna + directions.y == linhas)
                 return null;
 
-            linha += direcaoX;
-            coluna += direcaoY;
+            linha += directions.x;
+            coluna += directions.y;
             return Trees[linha, coluna];
 
         }
 
+        private static (int dirX, int dirY) DirectionToPoints(TreeDirection treeDirection)
+        {
+            int dirX = 0;
+            int dirY = 0;
+            switch (treeDirection)
+            {
+                case TreeDirection.top:
+                    dirX = -1;
+                    break;
+                case TreeDirection.left:
+                    dirY = -1;
+                    break;
+                case TreeDirection.right:
+                    dirY = 1;
+                    break;
+                case TreeDirection.down:
+                    dirX = 1;
+                    break;
+                default:
+                    break;
+            }
+            return (dirX, dirY);
+        }
     }
 }
