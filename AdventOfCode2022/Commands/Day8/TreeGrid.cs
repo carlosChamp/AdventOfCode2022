@@ -72,9 +72,9 @@ namespace AdventOfCode2022.Commands.Day8
                     validaLinha(Trees[linha, coluna], linha, coluna);
                     validaColuna(Trees[linha, coluna], linha, coluna);
                     VisibleTreeMap[linha, coluna] = Trees[linha, coluna].Visible;
+                    CalculateScoreForTree(Trees[linha, coluna], linha, coluna);
                 }
             }
-            CalculateScenicScore();
             ResolvedGrid = true;
         }
 
@@ -179,18 +179,6 @@ namespace AdventOfCode2022.Commands.Day8
                 print.Append("\n");
             }
             return print.ToString();
-        }
-
-        internal void CalculateScenicScore()
-        {
-            for (int linha = 0; linha < linhas; linha++)
-            {
-                for (int coluna = 0; coluna < colunas; coluna++)
-                {
-                    CalculateScoreForTree(Trees[linha, coluna], linha, coluna);
-                }
-            }
-
         }
 
         private void CalculateScoreForTree(Tree tree, int linha, int coluna)

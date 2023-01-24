@@ -21,6 +21,7 @@ namespace AdventOfCode2022.Commands
         {
             string[] input = CommandUtils.GetInput(InputFileName);
             grid.SetGrid(input);
+            grid.ResolveTreeGrid();
         }
 
         string IDayCommand.PrintHeader()
