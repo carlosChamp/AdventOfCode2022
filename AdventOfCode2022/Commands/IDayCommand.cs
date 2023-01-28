@@ -10,7 +10,7 @@ namespace AdventOfCode2022.Commands
     {
         public static int Day { get; }
 
-        public static string InputFileName { get; }
+        public static string? InputFileName { get; }
         public bool IsPartOneComplete { get; }
 
         internal string PrintHeader();

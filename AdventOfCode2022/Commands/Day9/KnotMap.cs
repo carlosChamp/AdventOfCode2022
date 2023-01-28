@@ -32,12 +32,10 @@ namespace AdventOfCode2022.Commands.Day9
         private void generateBodyStructure()
         {
             knotListPosition.Clear();
-            knotListPosition.AddFirst(StartPoint);
-            var curr = knotListPosition.First;
+            LinkedListNode<Point> curr = knotListPosition.AddFirst(StartPoint);
             for (int i = 0; i < Size - 1; i++)
             {
-                knotListPosition.AddAfter(curr, ClonePoint(StartPoint));
-                curr = curr.Next;
+                curr = knotListPosition.AddAfter(curr, ClonePoint(StartPoint));
             }
             Footprints.Add(StartPoint);
         }
@@ -82,6 +80,8 @@ namespace AdventOfCode2022.Commands.Day9
         {
             (int x, int y) offsetValues = offsetPelaDirecao(direcao);
             var first = knotListPosition.First;
+            if (first == null)
+                throw new Exception("Aconteceu algo errado ao encontrar o primeiro nó. Verifique os parâmetros.");
             first.ValueRef.Offset(offsetValues.x, offsetValues.y);
             atualizaMinimoMaximo(first.Value);
             if (first.Next != null)
@@ -106,20 +106,26 @@ namespace AdventOfCode2022.Commands.Day9
                 this.Footprints.Add(TailPosition);
                 return false;
             }
+
             (int x, int y) direcaoParaCauda;
-            if (this.DistanceBetweenKnots(knot.Value, knot.Previous.Value, out direcaoParaCauda) < 2)
+
+            if (DistanceBetweenKnots(knot.Value, knot.Previous?.Value, out direcaoParaCauda) < 2)
                 return false;
 
-            //= offsetPelaDirecao(moreDistanceIn);
-            //knot.Value = ClonePoint(knot.Previous.Value);
+
             knot.ValueRef.Offset(direcaoParaCauda.x, direcaoParaCauda.y);
+#pragma warning disable CS8604 // Função recursiva, o nulo é condição de parada.
             return moveTailToHeadIfNeeded(knot.Next);
+#pragma warning restore CS8604 // Função recursiva, o nulo é condição de parada.
         }
 
-        private double DistanceBetweenKnots(Point actual, Point previous, out (int x, int y) moreDistanceIn)
+        private double DistanceBetweenKnots(Point actual, Point? previous, out (int x, int y) moreDistanceIn)
         {
-            int deltaX = (previous.X - actual.X);
-            int deltaY = (previous.Y - actual.Y);
+            if(!previous.HasValue)
+                throw new ArgumentNullException(nameof(previous));
+
+            int deltaX = previous.Value.X - actual.X;
+            int deltaY = previous.Value.Y - actual.Y;
 
             moreDistanceIn.y = Math.Clamp(deltaY, -1, 1);
             moreDistanceIn.x = Math.Clamp(deltaX, -1, 1);

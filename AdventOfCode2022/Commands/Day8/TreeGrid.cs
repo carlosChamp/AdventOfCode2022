@@ -8,8 +8,8 @@ namespace AdventOfCode2022.Commands.Day8
 
     internal class TreeGrid
     {
-        Tree[,] Trees;
-        bool[,] VisibleTreeMap;
+        Tree[,] Trees = new Tree[0, 0];
+        bool[,] VisibleTreeMap = new bool[0, 0];
         int linhas, colunas;
         public bool ResolvedGrid { get; set; }
 
@@ -230,7 +230,7 @@ namespace AdventOfCode2022.Commands.Day8
         private Tree? Walk(TreeDirection treeDirection, ref int linha, ref int coluna)
         {
             (int x, int y) directions = DirectionToPoints(treeDirection);
-                        
+
             if (linha + directions.x < 0 || linha + directions.x == linhas)
                 return null;
 
