@@ -9,7 +9,7 @@ namespace AdventOfCode2022.Commands.Day9
         LinkedList<Point> knotListPosition = new LinkedList<Point>();
         int minX, minY, maxX, maxY;
 
-        
+
         public KnotMap()
         {
             Size = 2;
@@ -36,9 +36,10 @@ namespace AdventOfCode2022.Commands.Day9
             var curr = knotListPosition.First;
             for (int i = 0; i < Size - 1; i++)
             {
-                knotListPosition.AddAfter(curr, new Point(0, 0));
+                knotListPosition.AddAfter(curr, ClonePoint(StartPoint));
                 curr = curr.Next;
             }
+            Footprints.Add(StartPoint);
         }
 
         public Point StartPoint { get; private set; }
@@ -83,9 +84,8 @@ namespace AdventOfCode2022.Commands.Day9
             var first = knotListPosition.First;
             first.ValueRef.Offset(offsetValues.x, offsetValues.y);
             atualizaMinimoMaximo(first.Value);
-            this.Footprints.Add(TailPosition);
             if (first.Next != null)
-                this.moveTailToHeadIfNeeded(first.Next, direcao);
+                this.moveTailToHeadIfNeeded(first.Next);
         }
 
         private void atualizaMinimoMaximo(Point value)
@@ -99,28 +99,51 @@ namespace AdventOfCode2022.Commands.Day9
             if (value.Y > maxY) maxY = value.Y;
         }
 
-        private bool moveTailToHeadIfNeeded(LinkedListNode<Point> knot, Direcao lastHeadMovement)
+        private bool moveTailToHeadIfNeeded(LinkedListNode<Point> knot)
         {
             if (knot == null)
             {
                 this.Footprints.Add(TailPosition);
                 return false;
             }
-
-            if (this.DistanceBetweenKnots(knot.Value, knot.Previous.Value) < 2)
+            (int x, int y) direcaoParaCauda;
+            if (this.DistanceBetweenKnots(knot.Value, knot.Previous.Value, out direcaoParaCauda) < 2)
                 return false;
 
-            (int x, int y) direcaoParaCauda = offsetPelaDirecao(lastHeadMovement.Inverter());
-            knot.Value = ClonePoint(knot.Previous.Value);
+            //= offsetPelaDirecao(moreDistanceIn);
+            //knot.Value = ClonePoint(knot.Previous.Value);
             knot.ValueRef.Offset(direcaoParaCauda.x, direcaoParaCauda.y);
-            return moveTailToHeadIfNeeded(knot.Next, lastHeadMovement);
+            return moveTailToHeadIfNeeded(knot.Next);
         }
 
-        private double DistanceBetweenKnots(Point actual, Point previous)
+        private double DistanceBetweenKnots(Point actual, Point previous, out (int x, int y) moreDistanceIn)
         {
-            int deltaX = (actual.X - previous.X);
-            int deltaY = (actual.Y - previous.Y);
+            int deltaX = (previous.X - actual.X);
+            int deltaY = (previous.Y - actual.Y);
+
+            moreDistanceIn.y = Math.Clamp(deltaY, -1, 1);
+            moreDistanceIn.x = Math.Clamp(deltaX, -1, 1);
+
             return Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+        }
+
+        private Direcao determinarMaiorDiferencaPeloDelta(int deltaX, int deltaY)
+        {
+            if (Math.Abs(deltaX) > Math.Abs(deltaY))
+            {
+                if (deltaX >= 0)
+                    return Direcao.LEFT;
+                else
+                    return Direcao.RIGHT;
+            }
+            else
+            {
+                if (deltaY >= 0)
+                    return Direcao.DOWN;
+                else
+                    return Direcao.UP;
+            }
+
         }
 
         private (int x, int y) offsetPelaDirecao(Direcao direcao)
@@ -157,7 +180,7 @@ namespace AdventOfCode2022.Commands.Day9
             this.Walk((Direcao)dir, quantidade);
         }
 
-        internal string Print()
+        internal string Print(bool printKnot = false, bool debug = false)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -166,20 +189,38 @@ namespace AdventOfCode2022.Commands.Day9
                 string linha = string.Empty;
                 for (int j = minX; j <= maxX + 1; j++)
                 {
-                    Point tempMapPoint = new(j, i);
-                    if (i == 0 && j == 0)
-                        linha += "s";
-                    else if (tempMapPoint == knotListPosition.Last())
-                        linha += "#";
-                    else
-                        linha += Footprints.Contains(tempMapPoint) ?
-                            "#" : ".";
+                    linha += printNode(printKnot, i, j, debug);
 
                 }
                 stringBuilder.Insert(0, linha + "\r\n");
             }
 
             return stringBuilder.ToString();
+        }
+
+        private string printNode(bool printKnot, int i, int j, bool debug)
+        {
+            Func<string, string, string, string> formatString =
+                (string valor1, string valor2, string altValue) =>
+            {
+                return debug ? $"({valor1,4},{valor2,4})" : altValue;
+            };
+
+            string linha = String.Empty;
+            Point tempMapPoint = new(j, i);
+            int knotPosition = knotListPosition.ToList().FindIndex(k => k == tempMapPoint);
+            if (i == StartPoint.Y && j == StartPoint.X)
+                linha += formatString("s", "s", "s");
+            else if (tempMapPoint == knotListPosition.Last())
+                linha += formatString("#", "#", "#");
+            else if (tempMapPoint == knotListPosition.First() && printKnot)
+                linha += formatString("H", "H", "H");
+            else if (knotPosition != -1 && printKnot)
+                linha += formatString(knotPosition.ToString(), knotPosition.ToString(), knotPosition.ToString());
+            else
+                linha += Footprints.Contains(tempMapPoint) ?
+                    formatString("#", "#", "#") : formatString(j.ToString(), i.ToString(), ".");
+            return linha;
         }
 
         internal int CountFootprints()

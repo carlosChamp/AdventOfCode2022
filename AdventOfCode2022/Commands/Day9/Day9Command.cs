@@ -1,6 +1,7 @@
 ﻿using AdventOfCode2022.Commands.Day9;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,17 +12,20 @@ namespace AdventOfCode2022.Commands
     {
         public static int Day => 9;
         public static string InputFileName => CommandUtils.GetInputFilePath(Day);
-        bool IDayCommand.IsPartOneComplete => false;
+        bool IDayCommand.IsPartOneComplete => true;
 
         KnotMap KnotMap = new KnotMap();
+        KnotMap KnotMap2 = new KnotMap(10);
 
         void IDayCommand.Execute()
         {
             KnotMap.Reset();
+            KnotMap2.Reset();
             string[] input = CommandUtils.GetInput(InputFileName);
             foreach (var item in input)
             {
                 KnotMap.InterpretEntry(item);
+                KnotMap2.InterpretEntry(item);  
             }
 
         }
@@ -33,12 +37,12 @@ namespace AdventOfCode2022.Commands
 
         string IDayCommand.PrintPart1()
         {
-            return KnotMap.Print() + "\n" + KnotMap.CountFootprints().ToString();
+            return "\n" + KnotMap.Print(true) + "\n" + KnotMap.CountFootprints().ToString();
         }
 
         string IDayCommand.PrintPart2()
         {
-            throw new NotImplementedException();
+            return "\n" + KnotMap2.Print(true) + "\n" + KnotMap2.CountFootprints().ToString();
         }
     }
 }

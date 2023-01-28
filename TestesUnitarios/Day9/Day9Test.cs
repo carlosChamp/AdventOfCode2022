@@ -1,11 +1,15 @@
-﻿using System.Drawing;
+﻿using AdventOfCode2022.Commands.Day9;
+using System.Drawing;
 
 namespace TestesUnitarios.Day9
 {
     internal class Day9Test
     {
         string[] input;
+        string[] input2;
         KnotMap knotMap = new KnotMap();
+        KnotMap knotMap2 = new KnotMap(10, new Point(11,5));
+
         [SetUp]
         public void Setup()
         {
@@ -19,6 +23,18 @@ namespace TestesUnitarios.Day9
                 "D 1",
                 "L 5",
                 "R 2"
+            };
+
+            input2 = new string[]
+            {
+                "R 5",
+                "U 8",
+                "L 8",
+                "D 3",
+                "R 17",
+                "D 10",
+                "L 25",
+                "U 20"
             };
 
         }
@@ -71,7 +87,7 @@ namespace TestesUnitarios.Day9
         }
 
         [Test]
-        public void PrintTest()
+        public void Part1PrintTest()
         {
             string saida =
                 "..##...\r\n" +
@@ -86,6 +102,55 @@ namespace TestesUnitarios.Day9
             }
             Assert.That(knotMap.Print(), Is.EqualTo(saida));
 
+        }
+
+        [Test]
+        public void Part2PrintTest()
+        {
+            string saida =
+                "...........................\r\n" +
+                "...........................\r\n" +
+                "...........................\r\n" +
+                "...........................\r\n" +
+                "...........................\r\n" +
+                "...........................\r\n" +
+                "...........................\r\n" +
+                "...........................\r\n" +
+                "...........................\r\n" +
+                "#..........................\r\n" +
+                "#.............###..........\r\n" +
+                "#............#...#.........\r\n" +
+                ".#..........#.....#........\r\n" +
+                "..#..........#.....#.......\r\n" +
+                "...#........#.......#......\r\n" +
+                "....#......s.........#.....\r\n" +
+                ".....#..............#......\r\n" +
+                "......#............#.......\r\n" +
+                ".......#..........#........\r\n" +
+                "........#........#.........\r\n" +
+                ".........########..........\r\n";
+            
+            knotMap2.Reset();
+            foreach (var item in input2)
+            {
+                knotMap2.InterpretEntry(item);
+            }
+            Assert.That(knotMap2.Print(), Is.EqualTo(saida));
+        }
+
+        [Test]
+        public void Part2Test()
+        {
+            knotMap2.Reset();
+            foreach (var item in input2)
+            {
+                knotMap2.InterpretEntry(item);
+            }
+            Point headPosition = knotMap2.HeadPosition;
+            Point tailPosition = knotMap2.TailPosition;
+            Assert.That(headPosition, Is.EqualTo(new Point(0, 20)));
+            Assert.That(tailPosition, Is.EqualTo(new Point(0, 11)));
+            Assert.That(knotMap2.CountFootprints(), Is.EqualTo(36));
         }
     }
 }
