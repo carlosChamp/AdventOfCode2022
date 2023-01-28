@@ -14,8 +14,8 @@ namespace AdventOfCode2022.Commands
         public static string InputFileName => CommandUtils.GetInputFilePath(Day);
         bool IDayCommand.IsPartOneComplete => true;
 
-        KnotMap KnotMap = new KnotMap();
-        KnotMap KnotMap2 = new KnotMap(10);
+        private KnotMap KnotMap = new();
+        private KnotMap KnotMap2 = new(10);
 
         void IDayCommand.Execute()
         {
