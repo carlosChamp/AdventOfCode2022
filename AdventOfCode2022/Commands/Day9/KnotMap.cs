@@ -9,7 +9,6 @@ namespace AdventOfCode2022.Commands.Day9
         LinkedList<Point> knotListPosition = new LinkedList<Point>();
         int minX, minY, maxX, maxY;
 
-
         public KnotMap()
         {
             Size = 2;
