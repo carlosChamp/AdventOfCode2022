@@ -7,8 +7,8 @@ namespace TestesUnitarios.Day9
     {
         string[] input;
         string[] input2;
-        KnotMap knotMap = new KnotMap();
-        KnotMap knotMap2 = new KnotMap(10, new Point(11,5));
+        private KnotMap knotMap = new();
+        private KnotMap knotMap2 = new(10, new Point(11,5));
 
         [SetUp]
         public void Setup()
@@ -45,8 +45,11 @@ namespace TestesUnitarios.Day9
             knotMap.Reset();
             Point headPosition = knotMap.HeadPosition;
             Point tailPosition = knotMap.TailPosition;
-            Assert.That(headPosition, Is.EqualTo(new Point(0, 0)));
-            Assert.That(tailPosition, Is.EqualTo(new Point(0, 0)));
+            Assert.Multiple(() =>
+            {
+                Assert.That(headPosition, Is.EqualTo(new Point(0, 0)));
+                Assert.That(tailPosition, Is.EqualTo(new Point(0, 0)));
+            });
         }
 
         [Test]
@@ -56,8 +59,11 @@ namespace TestesUnitarios.Day9
             knotMap.Walk(Direcao.RIGHT, 4);
             Point headPosition = knotMap.HeadPosition;
             Point tailPosition = knotMap.TailPosition;
-            Assert.That(headPosition, Is.EqualTo(new Point(4, 0)));
-            Assert.That(tailPosition, Is.EqualTo(new Point(3, 0)));
+            Assert.Multiple(() =>
+            {
+                Assert.That(headPosition, Is.EqualTo(new Point(4, 0)));
+                Assert.That(tailPosition, Is.EqualTo(new Point(3, 0)));
+            });
         }
 
         [Test]
@@ -67,8 +73,11 @@ namespace TestesUnitarios.Day9
             knotMap.InterpretEntry("R 4");
             Point headPosition = knotMap.HeadPosition;
             Point tailPosition = knotMap.TailPosition;
-            Assert.That(headPosition, Is.EqualTo(new Point(4, 0)));
-            Assert.That(tailPosition, Is.EqualTo(new Point(3, 0)));
+            Assert.Multiple(() =>
+            {
+                Assert.That(headPosition, Is.EqualTo(new Point(4, 0)));
+                Assert.That(tailPosition, Is.EqualTo(new Point(3, 0)));
+            });
         }
 
         [Test]
@@ -81,9 +90,12 @@ namespace TestesUnitarios.Day9
             }
             Point headPosition = knotMap.HeadPosition;
             Point tailPosition = knotMap.TailPosition;
-            Assert.That(headPosition, Is.EqualTo(new Point(2, 2)));
-            Assert.That(tailPosition, Is.EqualTo(new Point(1, 2)));
-            Assert.That(knotMap.CountFootprints(), Is.EqualTo(13));
+            Assert.Multiple(() =>
+            {
+                Assert.That(headPosition, Is.EqualTo(new Point(2, 2)));
+                Assert.That(tailPosition, Is.EqualTo(new Point(1, 2)));
+                Assert.That(knotMap.CountFootprints(), Is.EqualTo(13));
+            });
         }
 
         [Test]
@@ -148,9 +160,12 @@ namespace TestesUnitarios.Day9
             }
             Point headPosition = knotMap2.HeadPosition;
             Point tailPosition = knotMap2.TailPosition;
-            Assert.That(headPosition, Is.EqualTo(new Point(0, 20)));
-            Assert.That(tailPosition, Is.EqualTo(new Point(0, 11)));
-            Assert.That(knotMap2.CountFootprints(), Is.EqualTo(36));
+            Assert.Multiple(() =>
+            {
+                Assert.That(headPosition, Is.EqualTo(new Point(0, 20)));
+                Assert.That(tailPosition, Is.EqualTo(new Point(0, 11)));
+                Assert.That(knotMap2.CountFootprints(), Is.EqualTo(36));
+            });
         }
     }
 }
