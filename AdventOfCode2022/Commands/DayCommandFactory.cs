@@ -27,6 +27,8 @@ internal class DayCommandFactory
                 return new Day9Command();
             case "10":
                 return new Day10Command();
+            case "11":
+                return new Day11Command();
             default: throw new NotImplementedException("Não resolvemos o problema desse dia ainda.");
         }
     }
