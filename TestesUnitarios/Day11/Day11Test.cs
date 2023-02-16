@@ -127,58 +127,7 @@ namespace TestesUnitarios.Day11
             Assert.That(monkeys[2].TestCount, Is.EqualTo(7));
             Assert.That(monkeys[3].TestCount, Is.EqualTo(105));
         }
-
-        [Test]
-        public void TestWorryLevels()
-        {
-            List<int> possibilidades = new List<int>();
-            for (int i = 1; i < 100; i++)
-            {
-
-                MonkeyList monkeys = new();
-                string expected =
-                    "== After round 1 ==\r\n" +
-                    "Monkey 0 inspected items 2 times.\r\n" +
-                    "Monkey 1 inspected items 4 times.\r\n" +
-                    "Monkey 2 inspected items 3 times.\r\n" +
-                    "Monkey 3 inspected items 6 times.\r\n";
-
-                monkeys.WorryLevelReductionFunction = x => x % 96577;
-                monkeys.Interpret(textMonkeys);
-                monkeys.ExecuteAndTransfer();
-                if (monkeys.ToString().Equals(expected))
-                    possibilidades.Add(i);
-            }
-
-            List<int> possibilidades1000 = new();
-
-
-            for (int i = 1; i < 1000; i++)
-            {
-
-                MonkeyList monkeys = new();
-                string expected =
-                    "== After round 10000 ==\r\n" +
-                    "Monkey 0 inspected items 52166 times.\r\n" +
-                    "Monkey 1 inspected items 47830 times.\r\n" +
-                    "Monkey 2 inspected items 1938 times.\r\n" +
-                    "Monkey 3 inspected items 52013 times.\r\n";
-
-                monkeys.WorryLevelReductionFunction = x => x % 96577;
-                monkeys.Interpret(textMonkeys);
-                for (int j = 0; j < 10000; j++)
-                    monkeys.ExecuteAndTransfer();
-                
-                if (monkeys.ToString().Equals(expected))
-                    possibilidades1000.Add(i);
-            }
-
-            List<int> PossibilidadesTestadas = possibilidades.Intersect(possibilidades1000).ToList();
-
-            Console.WriteLine(PossibilidadesTestadas);
-
-        }
-
+               
         [Test]
         public void StepsTest()
         {
